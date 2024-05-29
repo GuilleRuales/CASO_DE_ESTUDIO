@@ -1,3 +1,6 @@
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class Fecha {
 
     private int dia;
@@ -37,10 +40,21 @@ public class Fecha {
         this.anio = anio;
     }
 
+    public void inicializarHoy() {
+        GregorianCalendar gc = new GregorianCalendar();
+
+        this.dia = gc.get(Calendar.DAY_OF_MONTH);
+        this.mes = gc.get(Calendar.MONTH) + 1;
+        this.anio = gc.get(Calendar.YEAR);
+
+    }
+
+
+
     @Override
     public String toString() {
         return  "\nDia: "+dia+
-                "\nMes: "+mes+
-                "\nAnio: "+anio;
+                "\n  Mes: "+mes+
+                "\n  Anio: "+anio;
     }
 }

@@ -1,7 +1,8 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
 import java.util.List;
 
 public class Ventana {
@@ -14,7 +15,7 @@ public class Ventana {
     private JTextField textDia;
     private JButton agregarButton;
     private JButton modificarButton;
-    private JButton button1;
+    private JButton calcularFReservaButton;
     private JList list1;
     private JList list2;
 
@@ -41,26 +42,42 @@ public class Ventana {
         modificarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (list1.getSelectedIndex() != -1) {
+                    Empleado empleadoSeleccionado = (Empleado) list1.getSelectedValue();
+                    String cedula = empleadoSeleccionado.getCedula();
 
-                if(list1.getSelectedIndex()!=-1){
-                    int indice = list1.getSelectedIndex();
-                    Empleado em = empleados.getEmpleados().get(indice);
-                    Fecha fe = empleados.getEmpleados().get(indice).getFechaDeIngreso();
-                    textNombre.setText(em.getNombre());
-                    textSueldo.setText(String.valueOf(em.getSueldoMensual()));
-                    textDia.setText(String.valueOf(fe.getDia()));
-                    textMes.setText(String.valueOf(fe.getMes()));
-                    textAnio.setText(String.valueOf(fe.getAnio()));
+                    String nuevoNombre = textNombre.getText();
+                    Fecha nuevaFecha = new Fecha(
+                            Integer.parseInt(textDia.getText()),
+                            Integer.parseInt(textMes.getText()),
+                            Integer.parseInt(textAnio.getText())
+                    );
+                    double nuevoSueldo = Double.parseDouble(textSueldo.getText());
 
-                    empleados.editar(textCedula.getText(), textNombre.getText(), new Fecha(Integer.parseInt(textDia.getText()),
-                            Integer.parseInt(textMes.getText()), Integer.parseInt(textAnio.getText())),
-                            Double.parseDouble(textSueldo.getText()));
-
-                    List<Empleado> lista = empleados.listarEmpleados();
-                    llenarJlist(lista, list1, dlm);
-
+                    try {
+                        empleados.editar(cedula, nuevoNombre, nuevaFecha, nuevoSueldo);
+                        List<Empleado> lista = empleados.listarEmpleados();
+                        llenarJlist(lista, list1, dlm);
+                    } catch (NumberFormatException ex) {
+                        ex.printStackTrace();
+                    }
                 }
+            }
+        });
 
+
+
+        list1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && list1.getSelectedIndex() != -1) {
+                    Empleado empleadoSeleccionado = (Empleado) list1.getSelectedValue();
+                    textNombre.setText(empleadoSeleccionado.getNombre());
+                    textDia.setText(String.valueOf(empleadoSeleccionado.getFechaDeIngreso().getDia()));
+                    textMes.setText(String.valueOf(empleadoSeleccionado.getFechaDeIngreso().getMes()));
+                    textAnio.setText(String.valueOf(empleadoSeleccionado.getFechaDeIngreso().getAnio()));
+                    textSueldo.setText(String.valueOf(empleadoSeleccionado.getSueldoMensual()));
+                }
             }
         });
     }

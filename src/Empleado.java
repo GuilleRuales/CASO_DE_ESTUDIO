@@ -29,8 +29,9 @@ public class Empleado {
     @Override
     public String toString() {
         return  "Cedula: "+cedula+
-                "\nNombre: "+nombre+
-                "\nFecha De Ingreso: "+fechaDeIngreso;
+                "\n  Nombre: "+nombre+
+                "\n  Sueldo Mensual: "+sueldoMensual+
+                "\n  Fecha De Ingreso: "+fechaDeIngreso;
     }
 
     public String getCedula() {
@@ -80,4 +81,8 @@ public class Empleado {
     public void setImpuestoRenta(Double impuestoRenta) {
         this.impuestoRenta = impuestoRenta;
     }
+
+
+
+
 }

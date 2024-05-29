@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Listas {
 
     List<Empleado> empleados;
+    Fecha fecha = new Fecha();
 
     public Listas() {
         empleados = new ArrayList<>();
@@ -24,17 +23,17 @@ public class Listas {
             throw new Exception("La cedula ya esta registrada");
     }
 
-    public List<Empleado> editar( String cedula, String nuevoNombre,
-                                 Fecha nuevaFechaDeIngreso, Double nuevoSueldoMensual) {
-        for (Empleado e : empleados) {
-            if (e.getCedula().equals(cedula)) {
-                e.setNombre(nuevoNombre);
-                e.setFechaDeIngreso(nuevaFechaDeIngreso);
-                e.setSueldoMensual(nuevoSueldoMensual);
-            }
+    public void editar(String cedula, String nuevoNombre, Fecha nuevaFechaDeIngreso, Double nuevoSueldoMensual) {
+        Empleado empleado = buscarEmpleado(cedula);
+        if (empleado != null) {
+            empleado.setNombre(nuevoNombre);
+            empleado.setFechaDeIngreso(nuevaFechaDeIngreso);
+            empleado.setSueldoMensual(nuevoSueldoMensual);
+        } else {
+            throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
         }
-        return empleados;
     }
+
 
     public List<Empleado> listarEmpleados(){
         List<Empleado> lista = new LinkedList<>();
