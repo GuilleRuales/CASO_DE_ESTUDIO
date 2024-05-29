@@ -82,7 +82,55 @@ public class Empleado {
         this.impuestoRenta = impuestoRenta;
     }
 
+    public int calcularAntiguedad() {
+        Fecha fechaActual = new Fecha();
+        fechaActual.inicializarHoy();
 
+        int anios = fechaActual.getAnio() - this.fechaDeIngreso.getAnio();
+        int meses = fechaActual.getMes() - this.fechaDeIngreso.getMes();
+        int dias = fechaActual.getDia() - this.fechaDeIngreso.getDia();
 
+        if (meses < 0 || (meses == 0 && dias < 0)) {
+            anios--;
+        }
+
+        return anios;
+    }
+
+    public double calcularFondosDeReserva() {
+        int antiguedad = calcularAntiguedad();
+        if (antiguedad < 1) {
+            return 0.0;
+        }
+        return this.sueldoMensual * antiguedad;
+    }
+
+    public double calcularAporteAlSeguro() {
+        return this.sueldoMensual * 0.0945;
+    }
+
+    public double calcularImpuestoRenta() {
+        double sueldoAnual = this.sueldoMensual * 12;
+        double impuesto = 0.0;
+
+        if (sueldoAnual <= 5000) {
+            impuesto = 0.0;
+        } else if (sueldoAnual <= 10000) {
+            impuesto = (sueldoAnual - 5000) * 0.10;
+        } else if (sueldoAnual <= 18000) {
+            impuesto = (5000 * 0.10) + (sueldoAnual - 10000) * 0.20;
+        } else {
+            impuesto = (5000 * 0.10) + (8000 * 0.20) + (sueldoAnual - 18000) * 0.30;
+        }
+
+        return impuesto / 12;  // Importe mensual
+    }
+
+    public double calcularSueldoARecibir() {
+        double aporteAlSeguro = calcularAporteAlSeguro();
+        double impuestoRenta = calcularImpuestoRenta();
+        double fondosDeReserva = calcularFondosDeReserva() / 12;  // Fondos de reserva mensual
+        return this.sueldoMensual - aporteAlSeguro - impuestoRenta + fondosDeReserva;
+    }
 
 }

@@ -34,12 +34,47 @@ public class Listas {
         }
     }
 
-
     public List<Empleado> listarEmpleados(){
         List<Empleado> lista = new LinkedList<>();
         for (Empleado e: empleados)
             lista.add(e);
         return lista;
+    }
+
+    public int obtenerAntiguedadEmpleado(String cedula) {
+        Empleado empleado = buscarEmpleado(cedula);
+        if (empleado != null) {
+            return empleado.calcularAntiguedad();
+        }
+        throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
+    }
+
+    public double obtenerFondosDeReservaEmpleado(String cedula) {
+        Empleado empleado = buscarEmpleado(cedula);
+        if (empleado != null) {
+            return empleado.calcularFondosDeReserva();
+        }
+        throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
+    }
+
+    public String generarInforme() {
+        StringBuilder informe = new StringBuilder();
+        informe.append(String.format("%-20s %-10s %-15s %-15s %-15s %-15s\n",
+                "NOMBRE", "SUELDO", "APORTE AL SEGURO", "IMPUESTO A LA RENTA", "FONDOS DE RESERVA", "SUELDO A RECIBIR"));
+
+        for (Empleado e : empleados) {
+            String nombre = e.getNombre();
+            double sueldoMensual = e.getSueldoMensual();
+            double aporteAlSeguro = e.calcularAporteAlSeguro();
+            double impuestoRenta = e.calcularImpuestoRenta();
+            double fondosDeReserva = e.calcularFondosDeReserva();
+            double sueldoARecibir = e.calcularSueldoARecibir();
+
+            informe.append(String.format("%-20s %-10.2f %-15.2f %-15.2f %-15.2f %-15.2f\n",
+                    nombre, sueldoMensual, aporteAlSeguro, impuestoRenta, fondosDeReserva, sueldoARecibir));
+        }
+
+        return informe.toString();
     }
 
     public List<Empleado> getEmpleados() {

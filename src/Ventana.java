@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -18,9 +19,11 @@ public class Ventana {
     private JButton calcularFReservaButton;
     private JList list1;
     private JList list2;
+    private JButton reporteButton;
 
     private Listas empleados = new Listas();
     DefaultListModel dlm = new DefaultListModel();
+    DefaultListModel dlm2 = new DefaultListModel<>();
 
     public Ventana() {
 
@@ -28,8 +31,16 @@ public class Ventana {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    empleados.agregar(textCedula.getText(), textNombre.getText(), new Fecha(Integer.parseInt(textDia.getText()), Integer.parseInt(textMes.getText()),
-                                    Integer.parseInt(textAnio.getText())), Double.parseDouble(textSueldo.getText()));
+                    if (textCedula.getText().isEmpty() || textNombre.getText().isEmpty() ||
+                            textDia.getText().isEmpty() || textMes.getText().isEmpty() ||
+                            textAnio.getText().isEmpty() || textSueldo.getText().isEmpty()) {
+
+                        JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }else{
+                        empleados.agregar(textCedula.getText(), textNombre.getText(), new Fecha(Integer.parseInt(textDia.getText()), Integer.parseInt(textMes.getText()),
+                                Integer.parseInt(textAnio.getText())), Double.parseDouble(textSueldo.getText()));
+                    }
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -65,8 +76,6 @@ public class Ventana {
             }
         });
 
-
-
         list1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -78,6 +87,33 @@ public class Ventana {
                     textAnio.setText(String.valueOf(empleadoSeleccionado.getFechaDeIngreso().getAnio()));
                     textSueldo.setText(String.valueOf(empleadoSeleccionado.getSueldoMensual()));
                 }
+            }
+        });
+        calcularFReservaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (list1.getSelectedIndex() != -1) {
+                    Empleado empleadoSeleccionado = (Empleado) list1.getSelectedValue();
+                    int antiguedad = empleadoSeleccionado.calcularAntiguedad();
+                    double fondosDeReserva = empleadoSeleccionado.calcularFondosDeReserva();
+
+                    JOptionPane.showMessageDialog(null,"Antigüedad: " + antiguedad + " años\n" +
+                                    "Fondos de Reserva: $" + fondosDeReserva);
+                } else {
+                    JOptionPane.showMessageDialog(null,"Seleccione un empleado de la lista");
+                }
+            }
+        });
+        reporteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String informe = empleados.generarInforme();
+                JTextArea textArea = new JTextArea(informe);
+                textArea.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(600, 400));
+
+                JOptionPane.showMessageDialog(null, scrollPane, "Informe de Empleados", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -105,4 +141,5 @@ public class Ventana {
         frame.pack();
         frame.setVisible(true);
     }
+
 }
