@@ -59,8 +59,7 @@ public class Listas {
 
     public String generarInforme() {
         StringBuilder informe = new StringBuilder();
-        informe.append(String.format("%-20s %-10s %-15s %-15s %-15s %-15s\n",
-                "NOMBRE", "SUELDO", "APORTE AL SEGURO", "IMPUESTO A LA RENTA", "FONDOS DE RESERVA", "SUELDO A RECIBIR"));
+        informe.append("INFORME DE EMPLEADOS\n\n");
 
         for (Empleado e : empleados) {
             String nombre = e.getNombre();
@@ -68,10 +67,12 @@ public class Listas {
             double aporteAlSeguro = e.calcularAporteAlSeguro();
             double impuestoRenta = e.calcularImpuestoRenta();
             double fondosDeReserva = e.calcularFondosDeReserva();
-            double sueldoARecibir = e.calcularSueldoARecibir();
 
-            informe.append(String.format("%-20s %-10.2f %-15.2f %-15.2f %-15.2f %-15.2f\n",
-                    nombre, sueldoMensual, aporteAlSeguro, impuestoRenta, fondosDeReserva, sueldoARecibir));
+            informe.append("\tNombre: ").append(nombre).append(" ");
+            informe.append("Sueldo: ").append(sueldoMensual).append(" ");
+            informe.append("Aporte al seguro: ").append(aporteAlSeguro).append(" ");
+            informe.append("Impuesto a la renta: ").append(impuestoRenta).append(" ");
+            informe.append("Fondos de reserva: ").append(fondosDeReserva).append("\n");
         }
 
         return informe.toString();
