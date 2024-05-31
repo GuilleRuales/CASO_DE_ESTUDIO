@@ -42,7 +42,7 @@ public class Ventana {
                                 Integer.parseInt(textAnio.getText())), Double.parseDouble(textSueldo.getText()));
                     }
                 } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
                 List<Empleado> lista = empleados.listarEmpleados();
                 llenarJlist(lista, list1, dlm);
