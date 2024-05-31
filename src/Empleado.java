@@ -82,23 +82,13 @@ public class Empleado {
         this.impuestoRenta = impuestoRenta;
     }
 
-    public int calcularAntiguedad() {
-        Fecha fechaActual = new Fecha();
-        fechaActual.inicializarHoy();
-
-        int anios = fechaActual.getAnio() - this.fechaDeIngreso.getAnio();
-        int meses = fechaActual.getMes() - this.fechaDeIngreso.getMes();
-        int dias = fechaActual.getDia() - this.fechaDeIngreso.getDia();
-
-        if (meses < 0 || (meses == 0 && dias < 0)) {
-            anios--;
-        }
-
-        return anios;
+    // Modificado para usar calcularAntiguedad de Fecha
+    public int obtenerAntiguedad() {
+        return this.fechaDeIngreso.calcularAntiguedad();
     }
 
     public double calcularFondosDeReserva() {
-        int antiguedad = calcularAntiguedad();
+        int antiguedad = obtenerAntiguedad();
         if (antiguedad < 1) {
             return 0.0;
         }
@@ -124,13 +114,6 @@ public class Empleado {
         }
 
         return impuesto / 12;  // Importe mensual
-    }
-
-    public double calcularSueldoARecibir() {
-        double aporteAlSeguro = calcularAporteAlSeguro();
-        double impuestoRenta = calcularImpuestoRenta();
-        double fondosDeReserva = calcularFondosDeReserva() / 12;  // Fondos de reserva mensual
-        return this.sueldoMensual - aporteAlSeguro - impuestoRenta + fondosDeReserva;
     }
 
 }

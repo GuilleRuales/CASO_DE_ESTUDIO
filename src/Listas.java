@@ -23,14 +23,16 @@ public class Listas {
             throw new Exception("La cedula ya esta registrada");
     }
 
-    public void editar(String cedula, String nuevoNombre, Fecha nuevaFechaDeIngreso, Double nuevoSueldoMensual) {
+    public void editar(String cedula, String nuevoNombre, Fecha nuevaFechaDeIngreso, Double nuevoSueldoMensual) throws Exception{
+
         Empleado empleado = buscarEmpleado(cedula);
         if (empleado != null) {
             empleado.setNombre(nuevoNombre);
             empleado.setFechaDeIngreso(nuevaFechaDeIngreso);
             empleado.setSueldoMensual(nuevoSueldoMensual);
+
         } else {
-            throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
+            throw new Exception("No se encontró ningún empleado con la cédula especificada: " + cedula);
         }
     }
 
@@ -39,22 +41,6 @@ public class Listas {
         for (Empleado e: empleados)
             lista.add(e);
         return lista;
-    }
-
-    public int obtenerAntiguedadEmpleado(String cedula) {
-        Empleado empleado = buscarEmpleado(cedula);
-        if (empleado != null) {
-            return empleado.calcularAntiguedad();
-        }
-        throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
-    }
-
-    public double obtenerFondosDeReservaEmpleado(String cedula) {
-        Empleado empleado = buscarEmpleado(cedula);
-        if (empleado != null) {
-            return empleado.calcularFondosDeReserva();
-        }
-        throw new IllegalArgumentException("No se encontró ningún empleado con la cédula especificada: " + cedula);
     }
 
     public String generarInforme() {
@@ -67,12 +53,14 @@ public class Listas {
             double aporteAlSeguro = e.calcularAporteAlSeguro();
             double impuestoRenta = e.calcularImpuestoRenta();
             double fondosDeReserva = e.calcularFondosDeReserva();
+            int antiguedad = e.getFechaDeIngreso().calcularAntiguedad(); // Llamada al método calcularAntiguedad de Fecha
 
             informe.append("\tNombre: ").append(nombre).append(" ");
-            informe.append("Sueldo: ").append(sueldoMensual).append(" ");
-            informe.append("Aporte al seguro: ").append(aporteAlSeguro).append(" ");
-            informe.append("Impuesto a la renta: ").append(impuestoRenta).append(" ");
-            informe.append("Fondos de reserva: ").append(fondosDeReserva).append("\n");
+            informe.append("Sueldo: ").append(String.format("%.2f", sueldoMensual)).append(" ");
+            informe.append("Aporte al seguro: ").append(String.format("%.2f", aporteAlSeguro)).append(" ");
+            informe.append("Impuesto a la renta: ").append(String.format("%.2f", impuestoRenta)).append(" ");
+            informe.append("Fondos de reserva: ").append(String.format("%.2f", fondosDeReserva)).append(" ");
+            informe.append("Antigüedad: ").append(antiguedad).append(" años\n");
         }
 
         return informe.toString();

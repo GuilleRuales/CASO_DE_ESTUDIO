@@ -46,10 +46,22 @@ public class Fecha {
         this.dia = gc.get(Calendar.DAY_OF_MONTH);
         this.mes = gc.get(Calendar.MONTH) + 1;
         this.anio = gc.get(Calendar.YEAR);
-
     }
 
+    public int calcularAntiguedad() {
+        Fecha fechaActual = new Fecha();
+        fechaActual.inicializarHoy();
 
+        int anios = fechaActual.getAnio() - this.anio;
+        int meses = fechaActual.getMes() - this.mes;
+        int dias = fechaActual.getDia() - this.dia;
+
+        if (meses < 0 || (meses == 0 && dias < 0)) {
+            anios--;
+        }
+
+        return anios;
+    }
 
     @Override
     public String toString() {

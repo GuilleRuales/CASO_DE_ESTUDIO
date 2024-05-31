@@ -69,8 +69,8 @@ public class Ventana {
                         empleados.editar(cedula, nuevoNombre, nuevaFecha, nuevoSueldo);
                         List<Empleado> lista = empleados.listarEmpleados();
                         llenarJlist(lista, list1, dlm);
-                    } catch (NumberFormatException ex) {
-                        ex.printStackTrace();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
                 }
             }
@@ -89,12 +89,13 @@ public class Ventana {
                 }
             }
         });
+
         calcularFReservaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (list1.getSelectedIndex() != -1) {
                     Empleado empleadoSeleccionado = (Empleado) list1.getSelectedValue();
-                    int antiguedad = empleadoSeleccionado.calcularAntiguedad();
+                    int antiguedad = empleadoSeleccionado.obtenerAntiguedad(); // Llamamos a obtenerAntiguedad() en lugar de calcularAntiguedad()
                     double fondosDeReserva = empleadoSeleccionado.calcularFondosDeReserva();
 
                     JOptionPane.showMessageDialog(null,"Antigüedad: " + antiguedad + " años\n" +
@@ -104,6 +105,7 @@ public class Ventana {
                 }
             }
         });
+
         reporteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -130,19 +132,6 @@ public class Ventana {
             dl.addElement(e);
         listaMostrar.setModel(dl);
     }
-
-
-    /*public void quemarDatos(){
-        try {
-
-            Empleado empleado1 = new Empleado("1727066167", "EMILIO", new Fecha(8, 8, 2003), 5000.0);
-            Empleado empleado2 = new Empleado("1753468311", "ISRAEL", new Fecha(4, 11, 2004), 1200.0);
-
-
-        } catch (Exception e) {
-        }
-
-    }*/
 
 
     public static void main(String[] args) {
